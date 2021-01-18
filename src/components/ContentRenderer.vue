@@ -8,6 +8,7 @@
       :is="contentBlock.type"
       :value="contentBlock.value"
     ></component>
+    <div v-if="isContentLoading" class="loader"></div>
   </div>
 </template>
 
@@ -29,12 +30,13 @@ export default {
     contentBlocks: {
       type: Array,
       required: true
-    }
+    },
+    isContentLoading: Boolean
   },
 
   computed: {
     isContentEmpty () {
-      return this.contentBlocks.length === 0
+      return (this.contentBlocks.length === 0) && !this.isContentLoading
     }
   }
 }

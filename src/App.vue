@@ -1,9 +1,11 @@
 <template>
   <div class="container column">
-    <!-- TODO rename to content-renderer & content-creator -->
     <content-creator @add-content="addContent" />
 
-    <content-renderer :contentBlocks="contentBlocks" />
+    <content-renderer
+      :contentBlocks="contentBlocks"
+      :isContentLoading="isContentLoading"
+    />
   </div>
 
   <comments-block />
@@ -25,7 +27,8 @@ export default {
 
   data () {
     return {
-      contentBlocks: []
+      contentBlocks: [],
+      isContentLoading: true
     }
   },
 
@@ -41,6 +44,8 @@ export default {
         }
       })
     }
+
+    this.isContentLoading = false
   },
 
   methods: {
