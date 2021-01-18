@@ -1,13 +1,15 @@
 <template>
   <div class="container">
-    <p v-if="!isCommentsDownloaded">
-    <comment-button @download-comments="downloadComments">Загрузить комментарии</comment-button>
-    </p>
+    <comment-button v-if="!isCommentsDownloaded" @download-comments="downloadComments">Загрузить комментарии</comment-button>
     <comments-content :comments="comments" v-else></comments-content>
+
+    <div v-if="isLoaderActive" class="loader"></div>
   </div>
 </template>
 
 <script>
+import service from '../services/service'
+
 import CommentButton from './CommentButton'
 import CommentsContent from './CommentsContent'
 
@@ -17,28 +19,25 @@ export default {
     CommentsContent
   },
 
-  emits: ['activate-loader', 'stop-loader'],
-
   data () {
     return {
       comments: [],
+      isLoaderActive: false,
       isCommentsDownloaded: false
     }
   },
 
   methods: {
     async downloadComments () {
-      try {
-        this.$emit('activate-loader')
+      this.isLoaderActive = true
 
-        const response = await fetch('https://jsonplaceholder.typicode.com/comments?_limit=42')
-        this.comments = await response.json()
+      this.comments = await service.fetchComments()
+
+      if (this.comments.length) {
         this.isCommentsDownloaded = true
-      } catch (error) {
-        console.log(error.message)
       }
 
-      this.$emit('stop-loader')
+      this.isLoaderActive = false
     }
   }
 }

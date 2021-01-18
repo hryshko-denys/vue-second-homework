@@ -4,8 +4,8 @@
     <textarea
       id="value"
       rows="3"
-      :value="contentValue"
-      @change="changeValue"
+      :value="modelValue"
+      @input="changeValue"
     ></textarea>
   </div>
 </template>
@@ -13,15 +13,15 @@
 <script>
 export default {
   props: {
-    contentValue: String,
+    modelValue: String,
     label: String
   },
 
-  emits: ['update:contentValue'],
+  emits: ['update:modelValue'],
 
   methods: {
     changeValue (event) {
-      this.$emit('update:contentValue', event.target.value)
+      this.$emit('update:modelValue', event.target.value)
     }
   }
 }

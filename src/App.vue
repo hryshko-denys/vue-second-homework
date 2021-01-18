@@ -1,43 +1,56 @@
 <template>
-  <content-creator-layout>
-    <editor-form @add-content="addContent"></editor-form>
+  <div class="container column">
+    <!-- TODO rename to content-renderer & content-creator -->
+    <content-creator @add-content="addContent" />
 
-    <content-block :content="content"></content-block>
-  </content-creator-layout>
+    <content-renderer :contentBlocks="contentBlocks" />
+  </div>
 
-  <comments-block
-    @activate-loader="isLoaderActive = true"
-    @stop-loader="isLoaderActive = false"
-  ></comments-block>
-  <loader v-if="isLoaderActive"></loader>
+  <comments-block />
 </template>
 
 <script>
-import EditorForm from './components/EditorForm'
-import ContentBlock from './components/ContentBlock'
+import service from './services/service'
+
+import ContentCreator from './components/ContentCreator'
+import ContentRenderer from './components/ContentRenderer'
 import CommentsBlock from './components/CommentsBlock'
-import Loader from './components/Loader'
-import ContentCreatorLayout from './components/ContentCreatorLayout'
 
 export default {
   components: {
-    EditorForm,
-    ContentBlock,
-    CommentsBlock,
-    Loader,
-    ContentCreatorLayout
+    ContentCreator,
+    ContentRenderer,
+    CommentsBlock
   },
 
   data () {
     return {
-      content: [],
-      isLoaderActive: false
+      contentBlocks: []
+    }
+  },
+
+  async created () {
+    const data = await service.fetchContent()
+
+    if (data) {
+      this.contentBlocks = Object.keys(data).map(key => {
+        return {
+          id: key,
+          type: data[key].type,
+          value: data[key].value
+        }
+      })
     }
   },
 
   methods: {
-    addContent (content) {
-      this.content.push(content)
+    async addContent (content) {
+      this.contentBlocks.push({
+        ...content,
+        id: new Date()
+      })
+
+      service.postContent(content)
     }
   }
 }
