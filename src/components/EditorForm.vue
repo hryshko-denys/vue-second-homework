@@ -4,25 +4,26 @@
       label="Тип блока"
       v-model:typeValue="contentType"
     ></select-type>
+
     <textarea-value
       label="Значение"
       v-model:blockValue="contentValue"
     ></textarea-value>
 
-    <button class="btn primary" type="submit">
-      Добавить
-    </button>
+    <form-button type="submit">Добавить</form-button>
   </form>
 </template>
 
 <script>
 import SelectType from './SelectType'
 import TextareaValue from './TextareaValue'
+import FormButton from './FormButton'
 
 export default {
   components: {
     SelectType,
-    TextareaValue
+    TextareaValue,
+    FormButton
   },
 
   emits: ['add-content'],
