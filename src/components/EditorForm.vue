@@ -7,10 +7,10 @@
 
     <textarea-value
       label="Значение"
-      v-model:blockValue="contentValue"
+      v-model:contentValue="contentValue"
     ></textarea-value>
 
-    <form-button type="submit">Добавить</form-button>
+    <form-button :contentValue="contentValue">Добавить</form-button>
   </form>
 </template>
 
@@ -44,12 +44,6 @@ export default {
 
       this.contentValue = ''
       this.contentType = 'title'
-    }
-  },
-
-  computed: {
-    isButtonDisabled () {
-      return this.contentValue.length < 3
     }
   }
 }
